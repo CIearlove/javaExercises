@@ -2,6 +2,7 @@ package Chapter24;
 
 public class Heap<E extends Comparable> {
 	private java.util.ArrayList<E> list = new java.util.ArrayList<E>();
+	
 	/*
 	 * Create a default heap
 	 */
