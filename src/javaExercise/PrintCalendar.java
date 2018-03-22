@@ -4,67 +4,28 @@ import javax.swing.JOptionPane;
 public class PrintCalendar {
 	static String output = "";
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		/*
-		Scanner input = new Scanner(System.in);
 		
+		Scanner input = new Scanner(System.in);
 		System.out.println("Enter full year(e.g.,2001):");
 		int year = input.nextInt();
-		
 		System.out.println("Enter month as number between 1 and 12:");
 		int month = input.nextInt();
-		*/
-		String yearString = JOptionPane.showInputDialog(null,"Enter full year (i.e. 2001):",
-				 "Enter Year", JOptionPane.QUESTION_MESSAGE);
-		int year = Integer.parseInt(yearString);
-		
-		String monthString = JOptionPane.showInputDialog(null,"Enter month in number between 1 and 12:",
-				"Enter Month", JOptionPane.QUESTION_MESSAGE);
-		int month = Integer.parseInt(monthString);
 		
 		printMonth(year,month);
-		JOptionPane.showMessageDialog(null, output);
 	}
 	
 	public static void printMonth(int year,int month){
 		printMonthTitle(year,month);
 		printMonthBody(year,month);
 	}
-	/*
+
     public static void printMonthTitle(int year,int month){
 		System.out.println("         "+year+"     "+getMonthName(month));
 		System.out.println("_________________________________");
 		System.out.println("  Sun  Mon  Tue  Wed  Thu  Fri  Sat");
 		
 	}
-    */
-    static void printMonthTitle(int year, int month) {
-        output += "         " + getMonthName(month)
-          + ", " + year + "\n";
-        output += "-----------------------------\n";
-        output += " Sun Mon Tue Wed Thu Fri Sat\n";
-      }
     
-    static void printMonthBody(int year, int month) {
-        // Pad space before the first day of the month
-    	int startDay = getStartDay(year,month);
-		int numberOfDaysInMonth = getNumberOfDaysInMonth(year,month);
-        int i = 0;
-        for (i = 0; i < startDay; i++)
-          output += "    ";
-
-        for (i = 1; i <= numberOfDaysInMonth; i++) {
-          if (i < 10)
-            output += "     " + i;
-          else
-            output += "   " + i;
-
-          if ((i + startDay) % 7 == 0)
-            output += "\n";
-        }
-
-        output += "\n";
-      }
     public static String getMonthName(int month){
     	String monthName = "";
     	switch(month){
@@ -83,7 +44,7 @@ public class PrintCalendar {
     	}
     	return monthName;
     }
-    /*
+ 
     public static void printMonthBody(int year,int month){
     	
 		int startDay = getStartDay(year,month);
@@ -99,7 +60,7 @@ public class PrintCalendar {
 			
 		}
 	}
-    */
+ 
     public static int getStartDay(int year,int month){
     	final int START_DAY_FOR_JAN_1_1800 = 3;
     	int totalNumberOfDays = getTotalNumberOfDays(year,month);
