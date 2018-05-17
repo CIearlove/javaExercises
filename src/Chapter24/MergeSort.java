@@ -12,8 +12,7 @@ public class MergeSort {
       // Merge sort the second half
       int secondHalfLength = list.length - list.length / 2;
       int[] secondHalf = new int[secondHalfLength];
-      System.arraycopy(list, list.length / 2,
-        secondHalf, 0, secondHalfLength);
+      System.arraycopy(list, list.length / 2,secondHalf, 0, secondHalfLength);
       mergeSort(secondHalf);
 
       // Merge firstHalf with secondHalf
@@ -30,6 +29,7 @@ public class MergeSort {
     int current2 = 0; // Current index in list2
     int current3 = 0; // Current index in temp
 
+    //将list1与list2的数组排序
     while (current1 < list1.length && current2 < list2.length) {
       if (list1[current1] < list2[current2])
         temp[current3++] = list1[current1++];
@@ -37,9 +37,11 @@ public class MergeSort {
         temp[current3++] = list2[current2++];
     }
 
+    //list2已经比较完
     while (current1 < list1.length)
       temp[current3++] = list1[current1++];
 
+    //list1已经比较完
     while (current2 < list2.length)
       temp[current3++] = list2[current2++];
 
