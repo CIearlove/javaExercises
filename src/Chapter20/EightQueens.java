@@ -6,7 +6,7 @@ import javax.swing.*;
 public class EightQueens extends JApplet {
   public static final int SIZE = 8; // The size of the chess board
   private int[] queens = new int[SIZE]; // The queen positions 
-
+  
   public EightQueens() {
     search(0); // Search for a solution from row 0
     add(new ChessBoard(), BorderLayout.CENTER);
@@ -23,6 +23,7 @@ public class EightQueens extends JApplet {
   }
 
   /** Search for a solution starting from a specified row */
+  /**用到了回溯法*/
   private boolean search(int row) {
     if (row == SIZE) // Stopping condition
       return true; // A solution found to place 8 queens in 8 rows
@@ -39,7 +40,7 @@ public class EightQueens extends JApplet {
 
   class ChessBoard extends JPanel {
     private java.net.URL url 
-      = getClass().getResource("image/queen.jpg");
+      = getClass().getResource("../image/queen.jpg");
     private Image queenImage = new ImageIcon(url).getImage();
 
     ChessBoard() {

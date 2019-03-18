@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import Chapter27.AbstractGraph.Tree;
+
 public abstract class AbstractGraph<V> implements Graph<V>{
 	protected List<V> vertices;//Store vertices
 	protected List<List<Integer>> neighbors;//Adjacency lists
-	
+	protected boolean isCyclic;//是否存在环
 	/*
 	 * Construct a graph from edges and vertices stored in arrays
 	 */
@@ -17,6 +19,33 @@ public abstract class AbstractGraph<V> implements Graph<V>{
 			this.vertices.add(vertices[i]);
 		}
 		createAdjacencyLists(edges,vertices.length);
+	}
+	/*
+	 * Construct a graph from edges and vertices stored in List
+	 */
+	protected AbstractGraph(List<Edge> edges, List<V> vertices){
+		this.vertices = vertices;
+		createAdjacencyLists(edges,vertices.size());
+	}
+	/*
+	 * Construct a graph for integer vertices 0,1,2 and edge list
+	 */
+	protected AbstractGraph(List<Edge> edges, int numberOfVertices){
+		this.vertices = new ArrayList<V>();
+		for(int i=0;i<numberOfVertices;i++){
+			this.vertices.add((V) new Integer(i));//vertices is {0,1,...}
+		}
+		createAdjacencyLists(edges,numberOfVertices);
+	}
+	/*
+	 * Construct a graph from integer vertices 0,1,and edge array
+	 */
+	protected AbstractGraph(int[][] edges, int numberOfVertices){
+		this.vertices = new ArrayList<V>();
+		for(int i=0;i<numberOfVertices;i++){
+			this.vertices.add((V) new Integer(i));//vertices is {0,1,...}
+		}
+		createAdjacencyLists(edges,numberOfVertices);
 	}
 	/*
 	 * Create adjacency lists for each vertex
@@ -32,6 +61,20 @@ public abstract class AbstractGraph<V> implements Graph<V>{
 			int u = edges[i][0];
 			int v = edges[i][1];
 			neighbors.get(u).add(v);
+		}
+	}
+	/*
+	 * Create adjacency lists for each vertex
+	 */
+	private void createAdjacencyLists(List<Edge> edges, int numberOfVertices) {
+		//Create a linked list
+		neighbors = new ArrayList<List<Integer>>();
+		for(int i=0;i<numberOfVertices;i++){
+			neighbors.add(new ArrayList<Integer>());
+		}
+		
+		for(Edge edge : edges){
+			neighbors.get(edge.u).add(edge.v);
 		}
 	}
 	
@@ -60,6 +103,18 @@ public abstract class AbstractGraph<V> implements Graph<V>{
 	}
 	
 	/*
+	 * Print the edges
+	 */
+	public void printEdges(){
+		for(int u=0;u<neighbors.size();u++){
+			System.out.print("Vertex "+u+": ");
+			for(int j=0;j<neighbors.get(u).size();j++){
+				System.out.print("("+u+","+neighbors.get(u).get(j)+")");
+			}
+			System.out.println();
+		}
+	}
+	/*
 	 * Edge inner class inside the AbstractGraph class
 	 */
 	public static class Edge{
@@ -71,8 +126,6 @@ public abstract class AbstractGraph<V> implements Graph<V>{
 			this.v = v;
 		}
 	}
-	
-	
 	/*
 	 * Tree inner class inside the AbstractGraph class
 	 */
@@ -145,7 +198,7 @@ public abstract class AbstractGraph<V> implements Graph<V>{
 		 * Print the whole tree
 		 */
 		public void printTree(){
-			System.out.print("Root is: "+vertices.get(root));
+			System.out.println("Root is: "+vertices.get(root));
 			System.out.print("Edges: ");
 			for(int i=0;i<parent.length;i++){
 				if(parent[i] != -1){
@@ -177,8 +230,13 @@ public abstract class AbstractGraph<V> implements Graph<V>{
 		return new Tree(v,parent,searchOrders);
 		
 	}
-	/*
-	 * Recursive method for DFS search
+	/**
+	 * 
+	 * @param v
+	 * @param parent
+	 * @param searchOrders
+	 * @param isVisited
+	 * @return 是否构成环
 	 */
 	private void dfs(int v, int[] parent, List<Integer> searchOrders, boolean[] isVisited) {
 		//Store the visited vertex
@@ -188,6 +246,9 @@ public abstract class AbstractGraph<V> implements Graph<V>{
 			if(!isVisited[i]){
 				parent[i] = v;//The parent of vertex i is v
 				dfs(i,parent,searchOrders,isVisited);//Recursive search
+			}
+			else if(i!=parent[v]){//如果访问过，且不是其父节点，那么就构成环
+				isCyclic = true;
 			}
 		}
 	}
@@ -220,5 +281,60 @@ public abstract class AbstractGraph<V> implements Graph<V>{
 		}
 		
 		return new Tree(v,parent,searchOrders);
+	}
+	/**
+	 * Find out the path between two vertices by DFS
+	 * @param u src vertice
+	 * @param v des vertice
+	 * @return the path between two vertices
+	 */
+	public List<Integer> getPath(int u,int v){
+		ArrayList<Integer> path = new ArrayList<Integer>();
+		Tree tree = dfs(u);
+		while(u != v){
+			path.add((Integer) vertices.get(v));
+			v = tree.parent[v];
+			if(v == -1)
+				return null;
+		}
+		path.add((Integer) vertices.get(v));
+		return path;
+	}
+	/**
+	 * 找出一个图表中所有连通部分
+	 * @return 图中有n个连通部分，方法就返回一个有n个元素的线性表，每个元素都包含了连通部分的顶点。
+	 */
+	public List<List<Integer>> getConnectedComponents(){
+		
+		List<List<Integer>> list = new ArrayList<List<Integer>>();
+		List<Integer> vertexIndices = new ArrayList<Integer>();	
+		for (int i = 0; i < vertices.size(); i++)
+			vertexIndices.add(i);  
+		while (vertexIndices.size() > 0){
+			Tree tree = dfs(vertexIndices.get(0));
+			list.add(tree.getSearchOrders());
+			vertexIndices.removeAll(tree.getSearchOrders());
+		}
+		return list;
+	}
+	/**
+	 * 判定图中是否存在环
+	 * 图只有树边和反向边，如果有反向边那么就有环，否则就是树或森林
+	 */
+	public void isCyclic(int v){
+		List<Integer> searchOrders = new ArrayList<Integer>();
+		int[] parent = new int[vertices.size()];
+		for(int i=0;i<parent.length;i++){
+			parent[i]=-1;//Initialize parent[i] to -1
+		}
+		//Mark visited vertices
+		boolean[] isVisited = new boolean[vertices.size()];
+		dfs(v,parent,searchOrders,isVisited);
+	}
+	/**
+	 * 找出图中的环
+	 */
+	public List<Integer> getACycle(){
+		return null;
 	}
 }

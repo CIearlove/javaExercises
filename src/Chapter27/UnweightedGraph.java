@@ -7,8 +7,12 @@ public class UnweightedGraph<V> extends AbstractGraph<V> {
   public UnweightedGraph(int[][] edges, V[] vertices) {
     super(edges, vertices);
   }
-
-
+  /*
+	 * Construct a graph for integer vertices 0,1,2 and edge list
+	 */
+  public UnweightedGraph(List<Edge> edges, int numberOfVertices) {
+	    super(edges, numberOfVertices);
+	  }
 @Override
 public int[][] getAdjacencyMatrix() {
 	// TODO Auto-generated method stub
@@ -17,12 +21,6 @@ public int[][] getAdjacencyMatrix() {
 
 @Override
 public void printAdjacencyMatrix() {
-	// TODO Auto-generated method stub
-	
-}
-
-@Override
-public void printEdges() {
 	// TODO Auto-generated method stub
 	
 }
@@ -38,7 +36,5 @@ public List<Integer> getHamiltonianPath(int inexe) {
 	// TODO Auto-generated method stub
 	return null;
 }
-
-
 
 }

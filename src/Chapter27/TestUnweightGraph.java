@@ -23,8 +23,8 @@ public class TestUnweightGraph {
     };
     
     Graph<String> graph = new UnweightedGraph<String>(edges,vertices);
-    AbstractGraph<String>.Tree bfs = graph.bfs(5);//5 is Chicago
-    bfs.printPath(11);
+    AbstractGraph<String>.Tree bfs = graph.bfs(0);//0 is Seattle
+    bfs.printPath(5);//5 is Chicago
     bfs.printTree();
   }
     
