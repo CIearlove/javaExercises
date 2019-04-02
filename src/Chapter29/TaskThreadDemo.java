@@ -5,17 +5,17 @@ public class TaskThreadDemo {
 	public static void main(String[] args) {
 		//Create tasks
 		Runnable printA = new PrintChar('a',10);
-		//Runnable printB = new PrintChar('b',10);
+		Runnable printB = new PrintChar('b',10);
 		Runnable print100 = new PrintNum(10);
 		
 		//Create threads
 		Thread thread1 = new Thread(printA);
-		//Thread thread2 = new Thread(printB);
+		Thread thread2 = new Thread(printB);
 		Thread thread3 = new Thread(print100);
 		
 		//Start threads
 		thread1.start();
-		//thread2.start();
+		thread2.start();
 		thread3.start();
 	}
 }
@@ -36,14 +36,10 @@ public class TaskThreadDemo {
 		 * @see java.lang.Runnable#run()
 		 */
 		public void run() {
-			try{
 				for(int i=0;i<times;i++){
 					System.out.print(" "+charToPrint);
-					Thread.sleep(1000);
+					//Thread.sleep(1000);
 				}
-			}
-			catch (InterruptedException ex){
-			}
 		}
 	}
 	/*
@@ -61,18 +57,11 @@ public class TaskThreadDemo {
 		 * @see java.lang.Runnable#run()
 		 */
 		public void run() {
-			Thread thread = new Thread(new PrintChar('c',5));
-			thread.start();
-			try{
-				for(int i=0;i<lastNum;i++){
-					System.out.print(" "+i);
-						Thread.sleep(1);
-						if(i==5){
-							thread.join();
-						}
-				}
-			}
-			catch (InterruptedException ex){
+			//Thread thread = new Thread(new PrintChar('c',5));
+			//thread.start();
+			
+			for(int i=0;i<lastNum;i++){
+				System.out.print(" "+i);
 			}
 		}
 	}
