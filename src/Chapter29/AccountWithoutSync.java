@@ -2,6 +2,7 @@ package Chapter29;
 import java.util.concurrent.*;
 /**
  * 假设创建并启动100个线程，每个线程都往同一个账户中添加一个便士。
+ * 它演示了当所有线程同时访问同一个数据源时，就会出现数据破坏的问题。
  * @author Administrator
  *
  */
