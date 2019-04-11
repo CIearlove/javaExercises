@@ -64,6 +64,7 @@ public class ThreadCooperation {
 		    	try{
 		    		while(balance < withdrawAmount){
 		    			System.out.println("\t\t\tWait for a deposit.");
+		    			//余额小于取款金额时，等待有新存款的信号
 		    			newDeposit.await();
 		    		}
 		    			balance -= withdrawAmount;
@@ -83,7 +84,7 @@ public class ThreadCooperation {
 		    	try{
 		  	        balance += depositAmount;
 		  	        System.out.println("Deposit "+depositAmount+"\t\t\t\t\t\t"+getBalance());
-		  	        //唤醒在这个条件下的等待的线程
+		  	        //释放有新存款的信号
 		  	      newDeposit.signal();
 		    	}
 		        finally{
