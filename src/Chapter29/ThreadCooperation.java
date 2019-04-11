@@ -52,7 +52,7 @@ public class ThreadCooperation {
 		    private int balance = 0;
 		  //Create a lock
 		    private static Lock lock = new ReentrantLock();
-		    //创建一个条件
+		    //创建一个 条件
 		    private static Condition newDeposit = lock.newCondition();
 		    		
 		    public int getBalance() {
